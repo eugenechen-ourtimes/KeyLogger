@@ -72,6 +72,7 @@ class Client {
 				string key = getKey();
 				char L = key.length();
 				if (L == 0) continue;
+				L = htonl(L);
 				send(connHd, &L, 1, 0);
 				send(connHd, key.c_str(), L, 0);
 			}

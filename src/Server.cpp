@@ -99,15 +99,15 @@ Server::Server(unsigned listenPort)
 	}
 
 	struct sockaddr_in addr;
- 	addr.sin_family = AF_INET;
- 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
- 	addr.sin_port = htons(port);
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	addr.sin_port = htons(port);
 
- 	if (bind(listenFd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
- 		close(listenFd);
- 		fprintf(stderr, "port bind error\n");
-    	exit(-1);
- 	}
+	if (bind(listenFd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+		close(listenFd);
+		fprintf(stderr, "port bind error\n");
+		exit(-1);
+	}
 
 	if (listen(listenFd, 1024) < 0) {
 		close(listenFd);
@@ -184,6 +184,7 @@ void Server::checkConnections()
 			char msgLen;
 			int connFd = c_it->second;
 			int ret = recv(connFd, &msgLen, 1, 0);
+			msgLen = ntohl(msgLen);
 
 			if (ret == 0) {
 				/* handle connection close */
@@ -210,11 +211,11 @@ void Server::checkConnections()
 				return;
 			}
 
-			if (msgLen > 10) {
+			if (msgLen > 15) {
 				fprintf(stderr, "[Error]\n");
 				exit(-1);
 			}
-			
+
 			buf[msgLen] = '\0';
 			fprintf(stderr, "%s", buf);
 		}
