@@ -19,9 +19,7 @@
 
 #pragma comment(lib, "ws2_32.lib");
 
-static char *baseName = NULL;
 static Option options[] = {
-	{ OPT_STRING, "base", &baseName, "baseName"},
 	{ OPT_STRING, "host", &host, "remote host"},
 	{ OPT_UINT, "port", &port, "remote port"}
 };
@@ -38,6 +36,7 @@ void myUsleep(int64_t usec);
 class Client {
 	public:
 		SocketAddr remote;
+		static const string base;
 		Client() {
 			connHd = connect(true);
 			if (connHd == INVALID_SOCKET) exit(-1);
@@ -46,7 +45,6 @@ class Client {
 		Client(string host, unsigned port) {
 			remote = SocketAddr(host, port);
 			*this = Client();
-			string base = string(baseName);
 			exeName = base + ".exe";
 			logName = base + ".log";
 			memset(buf, '\0', sizeof(buf));
@@ -293,13 +291,10 @@ class Client {
 		}
 };
 
+const string Client::base = "client";
 int main(int argc, char *argv[])
 {
 	Opt_Parse(argc, argv, options, Opt_Number(options), 0);
-	if (baseName == NULL) {
-		fprintf(stderr, "must specify baseName\n");
-		exit(0);
-	}
 	Client client(host, port);
 	client.run();
 }

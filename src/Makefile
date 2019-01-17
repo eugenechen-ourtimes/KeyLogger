@@ -1,20 +1,21 @@
 .PHONY: clean
-TARGET=server client.exe
+TARGET=server client.exe client
 all: $(TARGET)
 
 INCLUDE=-I../include
 BIN=../bin
-CLIENT_OBJS=Client.o option.o
+CLIENTWINDOWS_OBJS=ClientWindows.o option.o
+CLIENTWINMAC_OBJS=ClientMac.o option.o
 SERVER_OBJS=Server.o option.o
 CPPFLAG=-std=c++11
-LIB=-lws2_32
+WINLIB=-lws2_32
 
 %.o: %.c
 	@echo "making: " $@
 	@gcc $< -c $(CFLAG) $(INCLUDE)
 %.o: %.cpp
 	@echo "making: " $@
-	@g++ $< -c $(CPPFLAG) $(INCLUDE) $(LIB)
+	@g++ $< -c $(CPPFLAG) $(INCLUDE) $(WINLIB)
 
 server: $(SERVER_OBJS)
 	@echo "making: " $@
@@ -22,7 +23,11 @@ server: $(SERVER_OBJS)
 
 client.exe:
 	@echo "making: " $@
-	@(echo 'gcc -c option.c $(INCLUDE) && g++ -c Client.cpp $(INCLUDE) && g++ -o $(BIN)/$@ $(CLIENT_OBJS) $(LIB) -m64  -Ofast -static' && echo exit) | /mnt/c/Windows/System32/cmd.exe
+	@(echo 'gcc -c option.c $(INCLUDE) && g++ -c ClientWindows.cpp $(INCLUDE) && g++ -o $(BIN)/$@ $(CLIENTWINDOWS_OBJS) $(WINLIB) -Ofast -static' && echo exit) | /mnt/c/Windows/System32/cmd.exe
+
+client: $(CLIENTWINMAC_OBJS)
+	@echo "making: " $@
+	@g++ -o $(BIN)/$@ $(CPPFLAG) $(INCLUDE) $(CLIENTMAC_OBJS)
 
 clean:
 	rm -f *.o
