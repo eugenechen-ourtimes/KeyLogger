@@ -184,7 +184,6 @@ void Server::checkConnections()
 			char msgLen;
 			int connFd = c_it->second;
 			int ret = recv(connFd, &msgLen, 1, 0);
-			msgLen = ntohl(msgLen);
 
 			if (ret == 0) {
 				/* handle connection close */

