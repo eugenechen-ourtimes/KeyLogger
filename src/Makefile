@@ -15,7 +15,7 @@ WINLIB=-lws2_32
 	@gcc $< -c $(CFLAG) $(INCLUDE)
 %.o: %.cpp
 	@echo "making: " $@
-	g++ $< -c $(CPPFLAG) $(INCLUDE)
+	@g++ $< -c $(CPPFLAG) $(INCLUDE)
 
 server: $(SERVER_OBJS)
 	@echo "making: " $@
@@ -24,6 +24,7 @@ server: $(SERVER_OBJS)
 client.exe:
 	@echo "making: " $@
 	@(echo 'gcc -c option.c $(INCLUDE) && g++ -c ClientWindows.cpp $(INCLUDE) && g++ -o $(BIN)/$@ $(CLIENTWINDOWS_OBJS) $(WINLIB) -Ofast -static' && echo exit) | /mnt/c/Windows/System32/cmd.exe
+
 client: $(CLIENTMAC_OBJS)
 	@echo "making: " $@
 	@gcc -c option.c $(INCLUDE)
