@@ -1,3 +1,4 @@
+#define _WIN32_WINNT 0x501
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -121,8 +122,8 @@ class Client {
 
 			if (regKey == 0) {
 				RegCloseKey(hKey);
-				return 0;
 			}
+			return 0;
 		}
 
 		bool createKey(const char *path)
